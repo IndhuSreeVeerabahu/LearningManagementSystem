@@ -10,7 +10,7 @@ spring:
   
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     defer-datasource-initialization: true
     properties:
@@ -19,7 +19,7 @@ spring:
         format_sql: false
         hbm2ddl:
           create_namespaces: true
-          auto: create-drop
+          auto: create
         jdbc:
           lob:
             non_contextual_creation: true
