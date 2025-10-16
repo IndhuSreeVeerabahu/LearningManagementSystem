@@ -54,6 +54,9 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Enrollment> enrollments;
     
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Certificate> certificates;
+    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -189,5 +192,13 @@ public class Course {
     
     public int getLessonCount() {
         return lessons != null ? lessons.size() : 0;
+    }
+    
+    public List<Certificate> getCertificates() {
+        return certificates;
+    }
+    
+    public void setCertificates(List<Certificate> certificates) {
+        this.certificates = certificates;
     }
 }
