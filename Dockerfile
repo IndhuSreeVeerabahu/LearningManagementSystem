@@ -20,4 +20,4 @@ RUN mvn clean package -DskipTests
 EXPOSE 8080
 
 # Run the application with production profile and PORT environment variable
-CMD ["sh", "-c", "java -Dspring.profiles.active=prod -Dserver.port=${PORT:-8080} -jar target/learning-management-system-1.0.0.jar"]
+CMD ["sh", "-c", "echo 'Starting application on port ${PORT:-8080}' && java -Dspring.profiles.active=prod -Dserver.port=${PORT:-8080} -Dlogging.level.org.springframework=DEBUG -jar target/learning-management-system-1.0.0.jar"]
