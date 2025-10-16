@@ -35,9 +35,9 @@ jwt:
   secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
   expiration: ${JWT_EXPIRATION:86400000} # 24 hours
 
-# File Upload Configuration
-file:
-  upload-dir: ${FILE_UPLOAD_DIR:uploads/}
+# File Upload Configuration (Using Uploadcare - no local storage needed)
+# file:
+#   upload-dir: ${FILE_UPLOAD_DIR:uploads/}
 
 # Uploadcare Configuration
 uploadcare:

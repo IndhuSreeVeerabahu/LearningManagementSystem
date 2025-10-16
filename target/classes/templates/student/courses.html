@@ -154,11 +154,14 @@
                            class="flex-1 bg-purple-600 text-white text-center py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
                             View Details
                         </a>
-                        <a th:if="${course.isPublished and course.isApproved}" 
-                           th:href="@{/student/courses/{courseId}/enroll(courseId=${course.id})}" 
-                           class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
-                            Enroll
-                        </a>
+                        <form th:if="${course.isPublished and course.isApproved}" 
+                              th:action="@{/student/courses/{courseId}/enroll(courseId=${course.id})}" 
+                              method="post" class="inline">
+                            <button type="submit" 
+                                    class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                                Enroll
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
