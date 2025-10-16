@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="775697d6-812e-4ce9-9a89-b0a089343a4b" name="Changes" comment="Deployement code">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/lms/LearningManagementSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/lms/LearningManagementSystemApplication.java" afterDir="false" />
-    </list>
+    <list default="true" id="775697d6-812e-4ce9-9a89-b0a089343a4b" name="Changes" comment="Deployement code" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,12 +19,12 @@
     &quot;assignee&quot;: &quot;IndhuSreeVeerabahu&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/IndhuSreeVeerabahu/LPM_IS.git&quot;,
-    &quot;accountId&quot;: &quot;06b8373d-71d7-4c27-a9de-9917b02c92db&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/IndhuSreeVeerabahu/LearningManagementSystem.git",
+    "accountId": "06b8373d-71d7-4c27-a9de-9917b02c92db"
   }
-}</component>
+}]]></component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="ProjectErrors" />
   </component>
@@ -56,7 +54,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
