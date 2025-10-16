@@ -6,6 +6,7 @@ import com.lms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -14,7 +15,11 @@ public class DataInitializer implements CommandLineRunner {
     private UserService userService;
     
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
+        // Wait for database tables to be created
+        waitForDatabaseTables();
+        
         // Create default admin user if it doesn't exist
         if (!userService.existsByUsername("admin")) {
             User admin = new User();
@@ -67,5 +72,30 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Username: student");
             System.out.println("Password: student123");
         }
+    }
+    
+    private void waitForDatabaseTables() {
+        int maxRetries = 30; // 30 seconds max wait
+        int retryCount = 0;
+        
+        while (retryCount < maxRetries) {
+            try {
+                // Try to check if users table exists by attempting a simple query
+                userService.existsByUsername("dummy_check");
+                System.out.println("Database tables are ready. Proceeding with data initialization...");
+                return;
+            } catch (Exception e) {
+                retryCount++;
+                System.out.println("Waiting for database tables to be created... (attempt " + retryCount + "/" + maxRetries + ")");
+                try {
+                    Thread.sleep(1000); // Wait 1 second
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }
+        
+        System.err.println("Warning: Database tables may not be ready. Data initialization may fail.");
     }
 }

@@ -19,9 +19,12 @@ spring:
         format_sql: false
         hbm2ddl:
           create_namespaces: true
+          auto: create-drop
         jdbc:
           lob:
             non_contextual_creation: true
+        connection:
+          provider_disables_autocommit: true
   
   servlet:
     multipart:
