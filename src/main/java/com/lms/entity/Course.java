@@ -26,7 +26,7 @@ public class Course {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
     
-    @Column(name = "course_image", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "course_image", columnDefinition = "TEXT")
     private String courseImage;
     
     @Transient

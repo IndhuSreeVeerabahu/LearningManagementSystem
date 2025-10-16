@@ -23,16 +23,16 @@ public class Lesson {
     @Column(columnDefinition = "TEXT")
     private String content;
     
-    @Column(name = "video_url", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "video_url", columnDefinition = "TEXT")
     private String videoUrl;
     
-    @Column(name = "pdf_url", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "pdf_url", columnDefinition = "TEXT")
     private String pdfUrl;
     
-    @Column(name = "image_url", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "image_url", columnDefinition = "TEXT")
     private String imageUrl;
     
-    @Column(name = "audio_url", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "audio_url", columnDefinition = "TEXT")
     private String audioUrl;
     
     @Column(name = "lesson_order")
