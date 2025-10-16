@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - LearnHub Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">L</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">LearnHub</span>
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <a href="/admin/dashboard" class="text-gray-600 hover:text-purple-600 transition-colors">Dashboard</a>
+                    <a href="/admin/users" class="text-purple-600 font-semibold">Users</a>
+                    <a href="/admin/courses" class="text-gray-600 hover:text-purple-600 transition-colors">Courses</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm font-medium" th:text="${currentUser != null ? currentUser.firstName.charAt(0) : 'A'}"></span>
+                            </div>
+                            <span class="text-gray-700" th:text="${currentUser != null ? currentUser.firstName : 'Admin'}"></span>
+                            <button onclick="toggleUserMenu()" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            <a href="/admin/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">System Settings</a>
+                            <hr class="my-1">
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Users Management -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">User Management</h1>
+            <p class="text-gray-600 mt-2">Manage all users in the system</p>
+        </div>
+        
+        <!-- Search -->
+        <div class="mb-6">
+            <form method="get" action="/admin/users" class="flex gap-4">
+                <input type="text" name="search" th:value="${searchTerm}" 
+                       placeholder="Search users by name, username, or email..."
+                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    Search
+                </button>
+            </form>
+        </div>
+        
+        <!-- Users Table -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-900">All Users</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr th:each="user : ${users}">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-sm font-medium" th:text="${user.firstName.charAt(0)}"></span>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900" th:text="${user.firstName + ' ' + user.lastName}"></div>
+                                        <div class="text-sm text-gray-500" th:text="${user.email}"></div>
+                                        <div class="text-sm text-gray-500" th:text="'@' + ${user.username}"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span th:if="${user.role.name() == 'ADMIN'}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    Admin
+                                </span>
+                                <span th:if="${user.role.name() == 'INSTRUCTOR'}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    Instructor
+                                </span>
+                                <span th:if="${user.role.name() == 'STUDENT'}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Student
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span th:if="${user.isActive}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                                <span th:if="${!user.isActive}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    Inactive
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${#temporals.format(user.createdAt, 'MMM dd, yyyy')}">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex space-x-2">
+                                    <!-- Toggle Status -->
+                                    <form th:action="@{/admin/users/{id}/toggle-status(id=${user.id})}" method="post" class="inline">
+                                        <button type="submit" 
+                                                th:text="${user.isActive ? 'Deactivate' : 'Activate'}"
+                                                th:class="${user.isActive ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'}"
+                                                class="transition-colors">
+                                        </button>
+                                    </form>
+                                    
+                                    <!-- Change Role -->
+                                    <div class="relative inline-block">
+                                        <select onchange="changeRole(this, [[${user.id}]])" class="text-sm border-0 bg-transparent text-blue-600 hover:text-blue-900">
+                                            <option value="">Change Role</option>
+                                            <option th:value="STUDENT" th:selected="${user.role.name() == 'STUDENT'}">Student</option>
+                                            <option th:value="INSTRUCTOR" th:selected="${user.role.name() == 'INSTRUCTOR'}">Instructor</option>
+                                            <option th:value="ADMIN" th:selected="${user.role.name() == 'ADMIN'}">Admin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        function changeRole(select, userId) {
+            if (select.value) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/users/' + userId + '/change-role';
+                
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'newRole';
+                input.value = select.value;
+                
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = event.target.closest('button');
+            if (!button && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

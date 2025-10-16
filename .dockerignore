@@ -1,0 +1,35 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# Maven
+target/
+!target/learning-management-system-1.0.0.jar
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+*.md
+
+# Test files
+src/test/
+
+# Uploads (not needed - using Uploadcare cloud storage)
+uploads/
+
+# Certificates
+certificates/
+
+# Railway specific
+railway.json

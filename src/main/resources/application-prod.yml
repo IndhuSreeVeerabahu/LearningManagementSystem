@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: learning-management-system
+  
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+  
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  
+  thymeleaf:
+    cache: true
+    prefix: classpath:/templates/
+    suffix: .html
+
+server:
+  port: ${PORT:8080}
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours
+
+# File Upload Configuration (Using Uploadcare - no local storage needed)
+# file:
+#   upload-dir: ${FILE_UPLOAD_DIR:uploads/}
+
+# Uploadcare Configuration
+uploadcare:
+  public-key: ${UPLOADCARE_PUBLIC_KEY}
+  secret-key: ${UPLOADCARE_SECRET_KEY}
+  cdn-url: ${UPLOADCARE_CDN_URL}
+
+logging:
+  level:
+    com.lms: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate: WARN

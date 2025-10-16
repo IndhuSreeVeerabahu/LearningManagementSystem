@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${course.title} + ' - Course Review'">Course Review - LearnHub Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">L</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">LearnHub</span>
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <a href="/admin/dashboard" class="text-gray-600 hover:text-purple-600 transition-colors">Dashboard</a>
+                    <a href="/admin/users" class="text-gray-600 hover:text-purple-600 transition-colors">Users</a>
+                    <a href="/admin/courses" class="text-purple-600 font-semibold">Courses</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm font-medium" th:text="${currentUser != null ? currentUser.firstName.charAt(0) : 'A'}"></span>
+                            </div>
+                            <span class="text-gray-700" th:text="${currentUser != null ? currentUser.firstName : 'Admin'}"></span>
+                            <button onclick="toggleUserMenu()" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            <a href="/admin/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">System Settings</a>
+                            <hr class="my-1">
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Course Review Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="/admin/courses" class="text-purple-600 hover:text-purple-700 font-medium">
+                ← Back to Course Management
+            </a>
+        </div>
+        
+        <!-- Course Header -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <div class="flex items-start justify-between mb-6">
+                <div class="flex-1">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2" th:text="${course.title}"></h1>
+                    <p class="text-gray-600 text-lg mb-4" th:text="${course.description}"></p>
+                    
+                    <!-- Course Status -->
+                    <div class="flex items-center space-x-4 mb-4">
+                        <span th:if="${course.isApproved}" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            Approved
+                        </span>
+                        <span th:if="${!course.isApproved}" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                            Pending Approval
+                        </span>
+                        <span th:if="${course.isPublished}" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            Published
+                        </span>
+                        <span th:if="${!course.isPublished}" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                            Draft
+                        </span>
+                    </div>
+                    
+                    <!-- Course Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                        <div>
+                            <span class="font-medium">Instructor:</span>
+                            <span th:text="${course.instructor.firstName + ' ' + course.instructor.lastName}"></span>
+                        </div>
+                        <div>
+                            <span class="font-medium">Lessons:</span>
+                            <span th:text="${#lists.size(lessons)}"></span>
+                        </div>
+                        <div>
+                            <span class="font-medium">Created:</span>
+                            <span th:text="${#temporals.format(course.createdAt, 'MMM dd, yyyy')}"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course Image -->
+                <div class="ml-8">
+                    <div class="w-48 h-32 bg-gray-200 rounded-lg overflow-hidden">
+                        <img th:if="${course.courseImage != null}" th:src="${course.courseImage}" 
+                             th:alt="${course.title}" class="w-full h-full object-cover">
+                        <div th:if="${course.courseImage == null}" class="w-full h-full flex items-center justify-center text-gray-500">
+                            <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Admin Actions -->
+            <div class="border-t pt-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Admin Actions</h3>
+                    <div class="flex space-x-3">
+                        <form th:if="${!course.isApproved}" th:action="@{/admin/courses/{id}/approve(id=${course.id})}" method="post">
+                            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                Approve Course
+                            </button>
+                        </form>
+                        <form th:if="${course.isApproved}" th:action="@{/admin/courses/{id}/reject(id=${course.id})}" method="post">
+                            <button type="submit" class="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
+                                Reject Course
+                            </button>
+                        </form>
+                        <form th:action="@{/admin/courses/{id}/delete(id=${course.id})}" method="post">
+                            <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                                    onclick="return confirm('Are you sure you want to delete this course?')">
+                                Delete Course
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Course Lessons -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Course Lessons</h2>
+            
+            <div th:if="${lessons != null and !#lists.isEmpty(lessons)}" class="space-y-4">
+                <div th:each="lesson : ${lessons}" class="border border-gray-200 rounded-lg p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2" th:text="${lesson.title}"></h3>
+                            <p class="text-gray-600 mb-3" th:text="${#strings.abbreviate(lesson.content, 200)}"></p>
+                            
+                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                <span th:if="${lesson.durationMinutes != null}">
+                                    <span class="font-medium">Duration:</span>
+                                    <span th:text="${lesson.durationMinutes} + ' minutes'"></span>
+                                </span>
+                                <span th:if="${lesson.lessonOrder != null}">
+                                    <span class="font-medium">Order:</span>
+                                    <span th:text="${lesson.lessonOrder}"></span>
+                                </span>
+                                <span th:if="${lesson.isPublished}">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Published
+                                    </span>
+                                </span>
+                                <span th:if="${!lesson.isPublished}">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        Draft
+                                    </span>
+                                </span>
+                            </div>
+                            
+                            <!-- Media Files -->
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <span th:if="${lesson.videoUrl != null}" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    Video
+                                </span>
+                                <span th:if="${lesson.pdfUrl != null}" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    PDF
+                                </span>
+                                <span th:if="${lesson.imageUrl != null}" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Image
+                                </span>
+                                <span th:if="${lesson.audioUrl != null}" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                    Audio
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div th:if="${lessons == null or #lists.isEmpty(lessons)}" class="text-center py-12">
+                <div class="text-gray-500">
+                    <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">No lessons found</h3>
+                    <p class="text-sm">This course doesn't have any lessons yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = event.target.closest('button');
+            if (!button && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
