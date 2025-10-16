@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Courses - LearnHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">L</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">LearnHub</span>
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-purple-600 transition-colors">Home</a>
+                    <a href="/courses" class="text-purple-600 font-semibold">Courses</a>
+                    
+                    <!-- Role-based navigation -->
+                    <div th:if="${currentUser != null}">
+                        <a th:if="${currentUser.role.name() == 'STUDENT'}" href="/student/dashboard" 
+                           class="text-gray-600 hover:text-purple-600 transition-colors">My Learning</a>
+                        <a th:if="${currentUser.role.name() == 'INSTRUCTOR'}" href="/instructor/dashboard" 
+                           class="text-gray-600 hover:text-purple-600 transition-colors">Instructor</a>
+                        <a th:if="${currentUser.role.name() == 'ADMIN'}" href="/admin/dashboard" 
+                           class="text-gray-600 hover:text-purple-600 transition-colors">Admin</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div th:if="${currentUser == null}">
+                        <a href="/login" class="text-gray-600 hover:text-purple-600 transition-colors">Login</a>
+                        <a href="/register" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Sign Up</a>
+                    </div>
+                    
+                    <div th:if="${currentUser != null}" class="relative">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm font-medium" th:text="${currentUser.firstName.charAt(0)}"></span>
+                            </div>
+                            <span class="text-gray-700" th:text="${currentUser.firstName}"></span>
+                            <button onclick="toggleUserMenu()" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            <div th:if="${currentUser.role.name() == 'ADMIN'}">
+                                <a href="/admin/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">System Settings</a>
+                            </div>
+                            <hr class="my-1">
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Page Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Browse Courses</h1>
+            <p class="text-gray-600 mt-2">Discover amazing courses to enhance your skills</p>
+        </div>
+        
+        <!-- Search Section -->
+        <div class="mb-8">
+            <form method="get" action="/courses" class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-1">
+                    <input type="text" name="search" th:value="${searchTerm}" 
+                           placeholder="Search for courses..."
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <button type="submit" class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                    Search
+                </button>
+            </form>
+        </div>
+        
+        <!-- Courses Grid -->
+        <div th:if="${courses != null and !#lists.isEmpty(courses)}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div th:each="course : ${courses}" class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="h-48 bg-gray-200 flex items-center justify-center">
+                    <img th:if="${course.courseImageUrl != null}" th:src="${course.courseImageUrl}" 
+                         th:alt="${course.title}" class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div th:if="${course.courseImageUrl == null}" class="text-gray-500 flex items-center justify-center w-full h-full">
+                        <svg class="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2" th:text="${course.title}"></h3>
+                    <p class="text-gray-600 mb-4" th:text="${#strings.abbreviate(course.description, 120)}"></p>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-sm text-gray-500">
+                            <span th:text="${course.instructor.firstName + ' ' + course.instructor.lastName}"></span>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <span th:text="${course.lessonCount} + ' lessons'">0 lessons</span>
+                        </div>
+                    </div>
+                    
+                    <a th:href="@{/courses/{id}(id=${course.id})}" 
+                       class="block w-full bg-purple-600 text-white text-center py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                        View Course
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- No Courses Message -->
+        <div th:if="${courses == null or #lists.isEmpty(courses)}" class="text-center py-12">
+            <div class="text-gray-500">
+                <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-lg font-semibold mb-2">No courses found</h3>
+                <p class="text-sm">Try adjusting your search terms or check back later for new courses.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = event.target.closest('button');
+            if (!button && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

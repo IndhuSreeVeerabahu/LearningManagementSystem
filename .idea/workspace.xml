@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="775697d6-812e-4ce9-9a89-b0a089343a4b" name="Changes" comment="Deployement code">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/lms/LearningManagementSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/lms/LearningManagementSystemApplication.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;IndhuSreeVeerabahu&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/IndhuSreeVeerabahu/LPM_IS.git&quot;,
+    &quot;accountId&quot;: &quot;06b8373d-71d7-4c27-a9de-9917b02c92db&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="342yQZ4uE84H0aX3tKQqLdFhlxG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.LearningManagementSystemApplication.executor": "Run",
+    "JUnit.AdminControllerTest.executor": "Run",
+    "JUnit.AdminSettingsControllerTest.executor": "Run",
+    "JUnit.AuthControllerTest.executor": "Run",
+    "JUnit.CourseControllerTest.executor": "Run",
+    "JUnit.HomeControllerTest.executor": "Run",
+    "JUnit.InstructorControllerTest.executor": "Run",
+    "JUnit.ProfileControllerTest.executor": "Run",
+    "JUnit.SettingsControllerTest.executor": "Run",
+    "JUnit.StudentControllerTest.executor": "Run",
+    "JUnit.UserServiceTest.executor": "Run",
+    "JUnit.WebAuthControllerTest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.LearningManagementSystemApplication">
+    <configuration name="LearningManagementSystemApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.lms.LearningManagementSystemApplication" />
+      <module name="learning-management-system" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ProfileControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="learning-management-system" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.lms.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.lms.controller.ProfileControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudentControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="learning-management-system" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.lms.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.lms.controller.StudentControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="learning-management-system" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.lms.service" />
+      <option name="MAIN_CLASS_NAME" value="com.lms.service.UserServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WebAuthControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="learning-management-system" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.lms.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.lms.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.lms.controller.WebAuthControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.LearningManagementSystemApplication" />
+        <item itemvalue="JUnit.UserServiceTest" />
+        <item itemvalue="JUnit.WebAuthControllerTest" />
+        <item itemvalue="JUnit.StudentControllerTest" />
+        <item itemvalue="JUnit.ProfileControllerTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="775697d6-812e-4ce9-9a89-b0a089343a4b" name="Changes" comment="" />
+      <created>1760425979993</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760425979993</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Inital Commit Project struct">
+      <option name="closed" value="true" />
+      <created>1760628960370</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1760628960370</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Deployement code">
+      <option name="closed" value="true" />
+      <created>1760632415172</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1760632415172</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Inital Commit Project struct" />
+    <MESSAGE value="Deployement code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Deployement code" />
+  </component>
+</project>

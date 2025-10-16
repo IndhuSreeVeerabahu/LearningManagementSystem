@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'Learning Management System'">LMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">L</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">LearnHub</span>
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-purple-600 transition-colors">Home</a>
+                    <a href="/courses" class="text-gray-600 hover:text-purple-600 transition-colors">Courses</a>
+                    
+                    <!-- Role-based navigation -->
+                    <div th:if="${currentUser != null}">
+                        <a th:if="${currentUser.role.name() == 'STUDENT'}" href="/student/dashboard" 
+                           class="text-gray-600 hover:text-purple-600 transition-colors">My Learning</a>
+                        <a th:if="${currentUser.role.name() == 'INSTRUCTOR'}" href="/instructor/dashboard" 
+                           class="text-gray-600 hover:text-purple-600 transition-colors">Instructor</a>
+                        <a th:if="${currentUser.role.name() == 'ADMIN'}" href="/admin/dashboard" 
+                           class="text-gray-600 hover:text-purple-600 transition-colors">Admin</a>
+                    </div>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <div th:if="${currentUser == null}">
+                        <a href="/login" class="text-gray-600 hover:text-purple-600 transition-colors">Login</a>
+                        <a href="/register" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Sign Up</a>
+                    </div>
+                    
+                    <div th:if="${currentUser != null}" class="relative">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm font-medium" th:text="${currentUser.firstName.charAt(0)}"></span>
+                            </div>
+                            <span class="text-gray-700" th:text="${currentUser.firstName}"></span>
+                            <button onclick="toggleUserMenu()" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            
+                            <!-- Role-specific menu items -->
+                            <div th:if="${currentUser.role.name() == 'ADMIN'}">
+                                <a href="/admin/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">System Settings</a>
+                            </div>
+                            
+                            <hr class="my-1">
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main>
+        <div th:fragment="content">
+            <!-- Content will be inserted here -->
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">L</span>
+                        </div>
+                        <span class="text-xl font-bold">LearnHub</span>
+                    </div>
+                    <p class="text-gray-400">Empowering learners worldwide with quality education.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Learn</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/courses" class="text-gray-400 hover:text-white transition-colors">Browse Courses</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Categories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Instructors</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Teach</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/instructor/dashboard" class="text-gray-400 hover:text-white transition-colors">Become Instructor</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Create Course</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 LearnHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script>
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = event.target.closest('button');
+            if (!button && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Learning - LearnHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">L</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">LearnHub</span>
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <a href="/student/dashboard" class="text-purple-600 font-semibold">My Learning</a>
+                    <a href="/student/courses" class="text-gray-600 hover:text-purple-600 transition-colors">Browse Courses</a>
+                    <a href="/student/my-courses" class="text-gray-600 hover:text-purple-600 transition-colors">My Courses</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm font-medium" th:text="${currentUser.firstName.charAt(0)}"></span>
+                            </div>
+                            <span class="text-gray-700" th:text="${currentUser.firstName}"></span>
+                            <button onclick="toggleUserMenu()" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            <hr class="my-1">
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Welcome back, <span th:text="${currentUser.firstName}"></span>!</h1>
+            <p class="text-gray-600 mt-2">Continue your learning journey</p>
+        </div>
+        
+        <!-- My Courses -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">My Courses</h2>
+                <a href="/student/courses" class="text-purple-600 hover:text-purple-700 font-medium">Browse all courses</a>
+            </div>
+            
+            <div th:if="${enrollments != null and !enrollments.empty}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div th:each="enrollment : ${enrollments}" class="bg-white rounded-lg shadow-lg overflow-hidden relative">
+                    <!-- Completion Badge -->
+                    <div th:if="${enrollment.isCompleted}" class="absolute top-2 right-2 z-10">
+                        <div class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                            ✓ Completed
+                        </div>
+                    </div>
+                    
+                    <div class="h-48 bg-gray-200 flex items-center justify-center">
+                        <img th:if="${enrollment.course.courseImage != null}" th:src="${enrollment.course.courseImage}" 
+                             th:alt="${enrollment.course.title}" class="w-full h-full object-cover">
+                        <div th:if="${enrollment.course.courseImage == null}" class="text-gray-500">
+                            <svg class="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2" th:text="${enrollment.course.title}"></h3>
+                        <p class="text-gray-600 mb-4" th:text="${#strings.abbreviate(enrollment.course.description, 100)}"></p>
+                        
+                        <!-- Progress Bar -->
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span th:text="${#numbers.formatDecimal(enrollment.completionPercentage, 1, 1)} + '%'">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-600 h-2 rounded-full" 
+                                     th:style="'width: ' + ${enrollment.completionPercentage} + '%'"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500" th:text="${enrollment.course.instructor.firstName + ' ' + enrollment.course.instructor.lastName}"></span>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex space-x-2">
+                                <a th:href="@{/student/courses/{id}(id=${enrollment.course.id})}" 
+                                   th:classappend="${enrollment.isCompleted} ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'"
+                                   class="text-white px-4 py-2 rounded-lg transition-colors">
+                                    <span th:text="${enrollment.isCompleted} ? 'View' : 'Continue'"></span>
+                                </a>
+                                
+                                <!-- Certificate Download Button -->
+                                <a th:if="${enrollment.isCompleted}" th:href="@{/student/courses/{id}/certificate(id=${enrollment.course.id})}" 
+                                   class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
+                                    📜 Certificate
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div th:if="${enrollments == null or enrollments.empty}" class="text-center py-12 bg-white rounded-lg shadow-lg">
+                <div class="text-gray-500">
+                    <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Start Learning Today</h3>
+                    <p class="text-sm mb-4">You haven't enrolled in any courses yet.</p>
+                    <a href="/student/courses" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                        Browse Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Learning Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Enrolled Courses</p>
+                        <p class="text-2xl font-semibold text-gray-900" th:text="${totalEnrolled}">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Completed Lessons</p>
+                        <p class="text-2xl font-semibold text-gray-900" th:text="${totalCompletedLessons}">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Completed Courses</p>
+                        <p class="text-2xl font-semibold text-gray-900" th:text="${completedCourses}">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Learning Hours</p>
+                        <p class="text-2xl font-semibold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = event.target.closest('button');
+            if (!button && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

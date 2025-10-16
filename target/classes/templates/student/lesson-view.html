@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${lesson.title} + ' - ' + ${course.title} + ' - LearnHub'">Lesson View - LearnHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">L</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">LearnHub</span>
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-purple-600 transition-colors">Home</a>
+                    <a href="/courses" class="text-gray-600 hover:text-purple-600 transition-colors">Courses</a>
+                    <a href="/student/dashboard" class="text-purple-600 font-semibold">My Learning</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-medium" th:text="${currentUser.firstName.charAt(0)}"></span>
+                    </div>
+                    <span class="text-gray-700" th:text="${currentUser.firstName}"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Lesson Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Success/Error/Info Messages -->
+        <div th:if="${success}" class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+            <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <span th:text="${error}"></span>
+        </div>
+        <div th:if="${info}" class="mb-6 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
+            <span th:text="${info}"></span>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <!-- Lesson Header -->
+                    <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="flex items-center space-x-3 mb-2">
+                                    <h1 class="text-2xl font-bold" th:text="${lesson.title}"></h1>
+                                    <div th:if="${isLessonCompleted}" class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        ✓ Completed
+                                    </div>
+                                </div>
+                                <p class="text-purple-100" th:text="${course.title}"></p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-purple-100">Lesson</div>
+                                <div class="text-lg font-semibold" th:text="${lesson.lessonOrder}">1</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lesson Content -->
+                    <div class="p-8">
+                        <!-- Video Content -->
+                        <div th:if="${lesson.videoUrl != null}" class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">Video Content</h3>
+                            <div class="bg-gray-900 rounded-lg overflow-hidden">
+                                <video controls class="w-full h-64 md:h-96" th:src="${lesson.videoUrl}">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        
+                        <!-- Audio Content -->
+                        <div th:if="${lesson.audioUrl != null}" class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">Audio Content</h3>
+                            <div class="bg-gray-100 rounded-lg p-4">
+                                <audio controls class="w-full" th:src="${lesson.audioUrl}">
+                                    Your browser does not support the audio tag.
+                                </audio>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Content -->
+                        <div th:if="${lesson.imageUrl != null}" class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">Image Content</h3>
+                            <div class="text-center">
+                                <img th:src="${lesson.imageUrl}" th:alt="${lesson.title}" 
+                                     class="max-w-full h-auto rounded-lg shadow-lg">
+                            </div>
+                        </div>
+                        
+                        <!-- PDF Content -->
+                        <div th:if="${lesson.pdfUrl != null}" class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">PDF Document</h3>
+                            <div class="bg-gray-100 rounded-lg p-4 text-center">
+                                <div class="mb-4">
+                                    <svg class="w-16 h-16 mx-auto text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-gray-600 mb-4">Download and view the PDF document</p>
+                                <a th:href="${lesson.pdfUrl}" 
+                                   class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors inline-block"
+                                   download>
+                                    Download PDF
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Text Content -->
+                        <div th:if="${lesson.content != null and !lesson.content.isEmpty()}" class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">Lesson Content</h3>
+                            <div class="prose max-w-none">
+                                <div th:utext="${lesson.content}"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- No Content Message -->
+                        <div th:if="${lesson.videoUrl == null and lesson.audioUrl == null and lesson.imageUrl == null and lesson.pdfUrl == null and (lesson.content == null or lesson.content.isEmpty())}" 
+                             class="text-center py-12 text-gray-500">
+                            <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h3 class="text-lg font-semibold mb-2">Lesson Content Coming Soon</h3>
+                            <p>This lesson is being prepared by the instructor. Check back later!</p>
+                        </div>
+                        
+                        <!-- Lesson Actions -->
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <a th:href="@{/student/courses/{courseId}(courseId=${course.id})}" 
+                                   class="text-purple-600 hover:text-purple-700 font-medium">
+                                    ← Back to Course
+                                </a>
+                                
+                                <!-- Mark as Complete Button -->
+                                <div th:if="${!isLessonCompleted}">
+                                    <form th:action="@{/student/courses/{courseId}/lessons/{lessonId}/complete(courseId=${course.id}, lessonId=${lesson.id})}" 
+                                          method="post" class="inline">
+                                        <button type="submit" 
+                                                class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                            Mark as Complete
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Already Completed Status -->
+                                <div th:if="${isLessonCompleted}" class="flex items-center space-x-2">
+                                    <div class="bg-green-100 text-green-800 px-4 py-2 rounded-lg font-medium">
+                                        ✓ Lesson Completed
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <!-- Course Progress -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Course Progress</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span th:text="${#lists.size(allLessons)} + ' lessons'">0 lessons</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-600 h-2 rounded-full" style="width: 25%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lesson Navigation -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Lessons</h3>
+                    <div class="space-y-2">
+                        <div th:each="lessonItem, iterStat : ${allLessons}" 
+                             th:class="${lessonItem.id == lesson.id ? 'bg-purple-100 border-purple-300' : 'bg-gray-50 border-gray-200'}"
+                             class="border rounded-lg p-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div th:class="${lessonItem.id == lesson.id ? 'bg-purple-600' : 'bg-gray-400'}"
+                                         class="w-6 h-6 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-xs font-medium" th:text="${iterStat.count}"></span>
+                                    </div>
+                                    <div>
+                                        <p th:class="${lessonItem.id == lesson.id ? 'font-medium text-purple-900' : 'text-gray-700'}"
+                                           th:text="${lessonItem.title}"></p>
+                                        <p class="text-xs text-gray-500" th:text="${lessonItem.durationMinutes != null ? lessonItem.durationMinutes + ' min' : 'No duration'}"></p>
+                                    </div>
+                                </div>
+                                <div th:if="${lessonItem.id != lesson.id}">
+                                    <a th:href="@{/student/courses/{courseId}/lessons/{lessonId}(courseId=${course.id}, lessonId=${lessonItem.id})}" 
+                                       class="text-purple-600 hover:text-purple-700 text-sm">
+                                        View
+                                    </a>
+                                </div>
+                                <div th:if="${lessonItem.id == lesson.id}">
+                                    <span class="text-purple-600 text-sm font-medium">Current</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
